@@ -1,0 +1,4 @@
+/venv/
+/train/datasets/data/
+/.idea/
+.ipynb_checkpoints
