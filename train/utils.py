@@ -1,5 +1,6 @@
 import numpy as np
 
+# Needs to be revised...
 def SampEnA(U, m, r, axis):
     def _maxdist(xi, xj):
         return abs(xi - xj).max(axis=axis)
