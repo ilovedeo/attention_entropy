@@ -5,11 +5,11 @@ import phyaat  # Download phyaat library by command: "pip install phyaat".
 import pandas as pd
 from datetime import datetime
 
-
 # here: current directory.
 here = os.getcwd()
 # Data download path.
 download_path = os.path.join(here + "/train" + "/datasets" + "/data")
+
 
 # data_path: parent directory.
 def rename_file(download_path):
@@ -55,6 +55,7 @@ rename_file(download_path)
 # encoded value of noise level and semanticity
 #################################################################################
 
+### Data import module
 
 # Example : we will do this in iterative way using for loop.
 i = 1
@@ -75,9 +76,29 @@ score_dir = os.path.join(
     + "/S{}_Textscore.csv".format(i)
 )
 
+# Define datetime format.
+dt_parser = lambda x: datetime.strptime(x, "%H:%M:%S:%f")
 
-# Read signal file by panda.
-data = pd.read_csv(data_dir, sep=",", parse_dates=["TimeStamp"], infer_datetime_format=True)
-score = pd.read_csv(score_dir, sep=",", parse_dates=["TimeStamp"], infer_datetime_format=True)
+# Read signal file by panda: set y/m as 1900/01/01.
+data = pd.read_csv(
+    data_dir, sep=",", parse_dates=["TimeStamp"], date_parser=dt_parser
+)
 
+score = pd.read_csv(
+    score_dir, sep=",", parse_dates=["TimeStamp"], date_parser=dt_parser
+)
 
+###
+
+# Remove -1 and add to list.
+
+###
+
+# Create unique label for each problems // concat TotalW, CorrectW, and dont use score file.
+
+# Find index where problem ends.
+
+# Discontinuity finder function.
+def find_disCT(series):
+
+    return True
