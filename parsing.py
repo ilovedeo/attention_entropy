@@ -1,30 +1,39 @@
-# Store current directory.
+# Data parsing code.
+
 import os
+import phyaat # Download phyaat library by command: "pip install phyaat".
 import pandas as pd
 
+# here: current directory.
+here = os.getcwd()
 
-# data_path: parent directory, file_list: name list of files in parent directory.
-def rename_file(data_path, file_list):
+# data_path: parent directory.
+def rename_file(download_path):
+    if not os.path.isdir(download_path):
+        dirPath = phyaat.download_data(baseDir=download_path, subject=-1, verbose=0, overwrite=False)
+
+    data_path =  os.path.join(download_path + "/phyaat_dataset" + "/Signals")
+    file_list = os.listdir(data_path)
     for dir in file_list:
         FilePath = os.path.join(data_path, dir)
         # Decide whether FilePath is a directory.
         if os.path.isdir(FilePath):
             # Original file directory
             org_filename = os.path.join(data_path + "/" + dir)
-            # New filoename
+            # New filename
             dst_filename = os.path.join(
                 data_path + "/" + dir[0] + "{0:02d}".format(int(dir[1:]))
             )
+            print("Original filename")
+            print(org_filename)
+            print("Revised filename")
+            print(dst_filename)
             os.rename(org_filename, dst_filename)
 
-
 # Rename file.
-# here: currnet directory
-here = os.getcwd()
-# Create file list.
-data_path = os.path.join(here + "/data" + "/phyaat_dataset" + "/Signals")
-file_list = os.listdir(data_path)
-rename_file(data_path, file_list)
+# Download phyaat library by command: "pip install phyaat".
+download_path = os.path.join(here + "/train" + "/datasets" + "/data")
+rename_file(download_path)
 
 #################################################################################
 # Parse the data.
@@ -46,20 +55,11 @@ rename_file(data_path, file_list)
 i = 1
 # Signal directory.
 data_dir = os.path.join(
-    here
-    + "/data"
-    + "/phyaat_dataset"
-    + "/Signals"
-    + "/S{0:02d}".format(i)
-    + "/S{}_Signals.csv".format(i)
+    data_path + "/S{0:02d}".format(i) + "/S{}_Signals.csv".format(i)
 )
+# Score directory.
 score_dir = os.path.join(
-    here
-    + "/data"
-    + "/phyaat_dataset"
-    + "/Signals"
-    + "/S{0:02d}".format(i)
-    + "/S{}_Textscore.csv".format(i)
+    data_path + "/S{0:02d}".format(i) + "/S{}_Textscore.csv".format(i)
 )
 
 # Read signal file by panda.
