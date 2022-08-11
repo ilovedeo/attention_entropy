@@ -1,18 +1,24 @@
 # Data parsing code.
 
 import os
-import phyaat # Download phyaat library by command: "pip install phyaat".
+import phyaat  # Download phyaat library by command: "pip install phyaat".
 import pandas as pd
+from datetime import datetime
+
 
 # here: current directory.
 here = os.getcwd()
+# Data download path.
+download_path = os.path.join(here + "/train" + "/datasets" + "/data")
 
 # data_path: parent directory.
 def rename_file(download_path):
     if not os.path.isdir(download_path):
-        dirPath = phyaat.download_data(baseDir=download_path, subject=-1, verbose=0, overwrite=False)
+        dirPath = phyaat.download_data(
+            baseDir=download_path, subject=-1, verbose=0, overwrite=False
+        )
 
-    data_path =  os.path.join(download_path + "/phyaat_dataset" + "/Signals")
+    data_path = os.path.join(download_path + "/phyaat_dataset" + "/Signals")
     file_list = os.listdir(data_path)
     for dir in file_list:
         FilePath = os.path.join(data_path, dir)
@@ -30,9 +36,8 @@ def rename_file(download_path):
             print(dst_filename)
             os.rename(org_filename, dst_filename)
 
+
 # Rename file.
-# Download phyaat library by command: "pip install phyaat".
-download_path = os.path.join(here + "/train" + "/datasets" + "/data")
 rename_file(download_path)
 
 #################################################################################
@@ -55,16 +60,24 @@ rename_file(download_path)
 i = 1
 # Signal directory.
 data_dir = os.path.join(
-    data_path + "/S{0:02d}".format(i) + "/S{}_Signals.csv".format(i)
+    download_path
+    + "/phyaat_dataset"
+    + "/Signals"
+    + "/S{0:02d}".format(i)
+    + "/S{}_Signals.csv".format(i)
 )
 # Score directory.
 score_dir = os.path.join(
-    data_path + "/S{0:02d}".format(i) + "/S{}_Textscore.csv".format(i)
+    download_path
+    + "/phyaat_dataset"
+    + "/Signals"
+    + "/S{0:02d}".format(i)
+    + "/S{}_Textscore.csv".format(i)
 )
 
-# Read signal file by panda.
-data = pd.read_csv(data_dir)
-score = pd.read_csv(score_dir)
 
-print(data.shape)
-print(score.shape)
+# Read signal file by panda.
+data = pd.read_csv(data_dir, sep=",", parse_dates=["TimeStamp"], infer_datetime_format=True)
+score = pd.read_csv(score_dir, sep=",", parse_dates=["TimeStamp"], infer_datetime_format=True)
+
+
