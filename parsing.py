@@ -30,6 +30,7 @@ rename_file(download_path)
 ### Data import module
 
 # Example : we will do this in iterative way using for loop.
+# for i in dir...
 i = 1
 # Signal directory.
 data_dir = os.path.join(
@@ -60,9 +61,20 @@ score = pd.read_csv(
     score_dir, sep=",", parse_dates=["TimeStamp"], date_parser=dt_parser
 )
 
+task_list = []
+
+###
+# Store header.
+if i == 1:
+    cols = list(pd.read_csv(data_dir, nrows =1))
+    task_list += [cols]
 ###
 
+
+
 # Remove -1 and add to list.
+
+
 
 ###
 
