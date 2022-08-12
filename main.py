@@ -1,5 +1,7 @@
 # Main training code.
+import os
+from train import *
 
-
-# Execute parsing code first.
-exec(open("parsing.py").read())
+# Data parse.
+here = os.path.dirname(os.path.abspath(__file__))
+parsing(here)
