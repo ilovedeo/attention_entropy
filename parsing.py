@@ -1,41 +1,13 @@
 # Data parsing code.
 
-import os
-import phyaat  # Download phyaat library by command: "pip install phyaat".
 import pandas as pd
 from datetime import datetime
+from train import *
 
 # here: current directory.
 here = os.getcwd()
 # Data download path.
 download_path = os.path.join(here + "/train" + "/datasets" + "/data")
-
-
-# data_path: parent directory.
-def rename_file(download_path):
-    if not os.path.isdir(download_path):
-        dirPath = phyaat.download_data(
-            baseDir=download_path, subject=-1, verbose=0, overwrite=False
-        )
-
-    data_path = os.path.join(download_path + "/phyaat_dataset" + "/Signals")
-    file_list = os.listdir(data_path)
-    for dir in file_list:
-        FilePath = os.path.join(data_path, dir)
-        # Decide whether FilePath is a directory.
-        if os.path.isdir(FilePath):
-            # Original file directory
-            org_filename = os.path.join(data_path + "/" + dir)
-            # New filename
-            dst_filename = os.path.join(
-                data_path + "/" + dir[0] + "{0:02d}".format(int(dir[1:]))
-            )
-            print("Original filename")
-            print(org_filename)
-            print("Revised filename")
-            print(dst_filename)
-            os.rename(org_filename, dst_filename)
-
 
 # Rename file.
 rename_file(download_path)
