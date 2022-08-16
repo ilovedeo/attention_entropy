@@ -1,8 +1,7 @@
 # Useful functions.
 
-import os
 import numpy as np
-import phyaat
+
 
 # Needs to be revised...
 def SampEnA(U, m, r, axis):

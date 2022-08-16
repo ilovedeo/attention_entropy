@@ -98,9 +98,6 @@ def mapper(data, score, intervals, new_index):
 # encoded value of noise level and semanticity
 #################################################################################
 
-# here: current directory.
-here = os.getcwd()
-
 ### Data import and store module.
 def parsing(here):
     # Data download path.
