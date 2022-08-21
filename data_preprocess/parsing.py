@@ -150,8 +150,8 @@ def parsing(here):
             score_dir, sep=",", usecols=[i for i in score_cols if i != "TimeStamp"]
         )
 
-        ###
-        # Create discontinuous interval list.
+        # Create discontinuous interval list: if the task index is changed,
+        # then we store the data and load a new task.
         intervals = find_disCT(data, "Label_T")
 
         # Add "TotalW", "CorrectWords"
@@ -160,11 +160,9 @@ def parsing(here):
         # Create episode list.
         episode_list, header = mapper(data, score, intervals, new_index)
 
-        ###
         # And then store header.
         episode_list.insert(0, header)
 
-        ###
         # Make destination directory.
         subject_dir = os.path.join(parsed_dir + "/S{0:02d}".format(subject))
         if not os.path.isdir(subject_dir):
