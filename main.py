@@ -15,9 +15,19 @@ if not (
 
 input("Press enter to continue...")
 
-# needs modulization.
-# Load data.
-temp = np.load("train\\datasets\\data\\episode_parsed\\S01\\S01.npz")
+# In case of the loop
+# for i in range(25):
+#     # needs modulization.
+#     # Load data.
+#     temp = np.load("train\\datasets\\data\\episode_parsed\\S{0:02d}\\S{0:02d}.npz".format(i+1))
+#     list = natsort.natsorted(temp.files)
+
+# pre-loop test
+i = 1
+# data load
+temp = np.load(
+    "train\\datasets\\data\\episode_parsed\\S{0:02d}\\S{0:02d}.npz".format(i + 1)
+)
 ### Needs to print the number of the subject.
 # Make list safely by natsort, list: "arr_#".
 list = natsort.natsorted(temp.files)
@@ -29,7 +39,7 @@ print("Total number of the episode: {}".format(len(list)))
 # Make a long list that ...
 for i, item in enumerate(list):
     # Print subject number and total number of episodes.
-    #print("Episode: {}".format(int(item[4:])))
+    # print("Episode: {}".format(int(item[4:])))
 
     # Data header.
     if i == 0:
@@ -42,4 +52,4 @@ for i, item in enumerate(list):
         print(temp[item].shape)
 
     # Store the EEG data
-    else:
+    # else:
