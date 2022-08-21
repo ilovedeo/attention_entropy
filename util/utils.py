@@ -36,8 +36,8 @@ def SampEnA(U, m, r, axis):
         for i in range(L):
             for j in range(L):
                 sum_ = sum_ + 1 * (
-                            _maxdist(np.take(x2, i, axis=axis), np.take(x2, j, axis=axis)) <= r
-                    )
+                    _maxdist(np.take(x2, i, axis=axis), np.take(x2, j, axis=axis)) <= r
+                )
         # (sum_ - L): Ignore the self counting to reduce bias.
         return (sum_ - L) / ((N - m) * (N - m - 1.0))
 
@@ -48,7 +48,7 @@ def SampEnA(U, m, r, axis):
         for i in range(L):
             for j in range(L):
                 sum_ = sum_ + 1 * (
-                        _maxdist(np.take(x1, i, axis=axis), np.take(x1, j, axis=axis)) <= r
+                    _maxdist(np.take(x1, i, axis=axis), np.take(x1, j, axis=axis)) <= r
                 )
         return (sum_ - L) / ((N - m) * (N - m - 1.0))
 
