@@ -5,6 +5,10 @@ import pandas as pd
 import phyaat
 import numpy as np
 from tqdm import tqdm
+import natsort
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+from util import *
 
 # File download and rename.
 # download_path: ./attention_entropy/train/datasets/data
@@ -64,8 +68,18 @@ def find_disCT(data, col_name):
     return disCT_list
 
 
+
 # Define a mapper function.
+# Normalize data and save chunks of data by given intervals.
 def mapper(data, score, intervals, new_index):
+    # EEG data normalization.
+    header = list(data.columns) + new_index
+    # Get EEG header and normalize.
+    EEG_list = header[0:14]
+    for channel in EEG_list:
+        data[channel] = (data[channel] - data[channel].mean()) / data[channel].std()
+
+    # Data chunking.
     episode_list = []
     for i, itv in enumerate(intervals):
 
@@ -157,7 +171,7 @@ def parsing(here):
         # Add "TotalW", "CorrectWords"
         new_index = ["TotalW", "CorrectWords"]
 
-        # Create episode list.
+        # Data normalize and create episode list.
         episode_list, header = mapper(data, score, intervals, new_index)
 
         # And then store header.
@@ -171,3 +185,79 @@ def parsing(here):
         # And, save
         np.savez(subject_dir + "/S{0:02d}.npz".format(subject), *episode_list)
 
+def store_MMSE(here):
+    # Data download path.
+    download_path = os.path.join(here + "/train" + "/datasets" + "/data")
+
+    # First make directory to store data
+    MMSE_dir = os.path.join(download_path + "/MMSE")
+    if os.path.isdir(MMSE_dir):
+        return None
+
+    # First make directory to store data
+    os.mkdir(MMSE_dir)
+
+    # create data path list
+    episode_path = os.path.join(download_path + "/episode_parsed")
+    file_list = sorted([i for i in os.listdir(episode_path) if i[0] == "S"])
+
+    for i, dir in enumerate(tqdm(file_list)):
+        # Load data.
+        temp = np.load("train\\datasets\\data\\episode_parsed\\S{0:02d}\\S{0:02d}.npz".format(i+1))
+        list = natsort.natsorted(temp.files)
+
+        # Print subject number and the total number of the episode.
+        print("Subject number: {}".format(i + 1))
+        print("Total number of the episode: {}".format(len(list)))
+
+        # Create empty list to store the value.
+        entropy_list = []
+
+        # Make a long list that ...
+        for i, item in enumerate(list):
+            # Print subject number and total number of episodes.
+            # print("Episode: {}".format(int(item[4:])))
+
+            # Store header.
+            if i == 0:
+                # 20: Label Noise level, 21: Label Semantic, 22: Label Task, 24: TotalW, 25: CorrectWords.
+                header = [
+                    "MMSE",
+                    "length_second",
+                    temp[item][20],
+                    temp[item][21],
+                    temp[item][22],
+                    temp[item][24],
+                    temp[item][25],
+                ]
+                data = pd.DataFrame(columns=header)
+
+            # Store the rest state EEG signal data.
+            elif i == 1:
+                print(temp[item].shape)
+                EEG = temp[item][:, 0:14]
+                ent = MMSE(EEG, 2, 0.25, 0)
+                # sampling rate: 128Hz
+                time = temp[item].shape[0] / 128
+                append = [ent, time, temp[item][0, 20], temp[item][0, 21], temp[item][0, 22], -1, -1]
+                temp = pd.DataFrame([append], columns=header)
+                data = pd.concat([data, temp], ignore_index=True)
+
+            # Store the EEG data.
+            else:
+                print(temp[item].shape)
+                EEG = temp[item][:, 0:14]
+                ent = MMSE(EEG, 2, 0.25, 0)
+                # sampling rate: 128Hz
+                time = temp[item].shape[0] / 128
+                append = [
+                    ent,
+                    time,
+                    temp[item][0, 20],
+                    temp[item][0, 21],
+                    temp[item][0, 22],
+                    temp[item][0, 24],
+                    temp[item][0, 25],
+                ]
+                temp = pd.DataFrame([append], columns=header)
+                data = pd.concat([data, temp], ignore_index=True)

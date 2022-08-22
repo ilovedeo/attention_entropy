@@ -3,15 +3,20 @@
 import numpy as np
 
 
-# A function to calculate sample entropy.
-def SampEnA(U, m, r, axis):
+# A function to calculate multivariate multiscale entropy(Ahmed et al).
+def MMSE(U, m, p, axis):
+    # U is normalized.
+    # Hence, use a total variation as a tolerance.
+    # 'trace' is a trace of the covariance matrix.
+    trace = U.shape[axis + 1]
+    r = p * trace
 
     # N is a length of the series.
     N = U.shape[axis]
 
     # Metric function.
     def _maxdist(xi, xj):
-        return abs(xi - xj).max(axis=axis)
+        return abs(xi - xj).max()
 
     # Split data and create window list.
     # Joint entropy condition : H(X, Y), count N - m vectors.
@@ -52,9 +57,8 @@ def SampEnA(U, m, r, axis):
                 )
         return (sum_ - L) / ((N - m) * (N - m - 1.0))
 
-    if _phi_joint(m) == 0:
-        return np.inf
+    # if _phi_joint(m) == 0:
+    #     return np.inf
 
-    else:
-        out = -np.log(_phi_joint(m) / _phi_given(m))
-        return out
+    out = -np.log(_phi_joint(m) / _phi_given(m))
+    return out
