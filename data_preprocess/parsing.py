@@ -205,8 +205,9 @@ def store_MMSE(here):
 
     for i, dir in enumerate(file_list):
         # Load data.
-        subject_num = "\\S{0:02d}".format(i + 1)
-        temp = np.load(os.path.join(episode_path + subject_num + subject_num + ".npz"))
+        subject_num = "S{0:02d}".format(i + 1)
+        npz_filename = subject_num + ".npz"
+        temp = np.load(os.path.join(episode_path, subject_num, npz_filename))
         list = natsort.natsorted(temp.files)
 
         # Make a long list that ...
@@ -268,5 +269,9 @@ def store_MMSE(here):
                 data = pd.concat([data, app], ignore_index=True)
 
         # Store data.
-        save_dir = os.mkdir(os.path.join(MMSE_dir + subject_num))
-        data.to_csv(os.path.join(save_dir + subject_num + ".csv"))
+        # Save directory
+        save_dir = os.path.join(MMSE_dir, subject_num)
+        os.mkdir(save_dir)
+        # Filename for csv file.
+        csv_filename = os.path.join(subject_num + ".csv")
+        data.to_csv(os.path.join(save_dir, csv_filename))
