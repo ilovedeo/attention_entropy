@@ -20,7 +20,7 @@ def rename_file(download_path):
             baseDir=download_path, subject=-1, verbose=0, overwrite=False
         )
 
-    data_path = os.path.join(download_path + "/phyaat_dataset" + "/Signals")
+    data_path = os.path.join(download_path + r"/phyaat_dataset" + r"/Signals")
     file_list = sorted([i for i in os.listdir(data_path) if i[0] == "S"])
     for dir in file_list:
         FilePath = os.path.join(data_path, dir)
@@ -116,10 +116,10 @@ def mapper(data, score, intervals, new_index):
 ### Data import and store module.
 def parsing(here):
     # Data download path.
-    download_path = os.path.join(here + "/train" + "/datasets" + "/data")
+    download_path = os.path.join(here + r"/train" + r"/datasets" + r"/data")
 
     # First make directory to store data
-    parsed_dir = os.path.join(download_path + "/episode_parsed")
+    parsed_dir = os.path.join(download_path + r"/episode_parsed")
     if os.path.isdir(parsed_dir):
         return None
 
@@ -130,7 +130,7 @@ def parsing(here):
     rename_file(download_path)
 
     # create data path list
-    data_path = os.path.join(download_path + "/phyaat_dataset" + "/Signals")
+    data_path = os.path.join(download_path + r"/phyaat_dataset" + r"/Signals")
     file_list = sorted([i for i in os.listdir(data_path) if i[0] == "S"])
 
     for i, dir in enumerate(tqdm(file_list)):
@@ -138,18 +138,18 @@ def parsing(here):
         # Signal directory.
         data_dir = os.path.join(
             download_path
-            + "/phyaat_dataset"
-            + "/Signals"
-            + "/S{0:02d}".format(subject)
-            + "/S{}_Signals.csv".format(subject)
+            + r"/phyaat_dataset"
+            + r"/Signals"
+            + r"/S{0:02d}".format(subject)
+            + r"/S{}_Signals.csv".format(subject)
         )
         # Score directory.
         score_dir = os.path.join(
             download_path
-            + "/phyaat_dataset"
-            + "/Signals"
-            + "/S{0:02d}".format(subject)
-            + "/S{}_Textscore.csv".format(subject)
+            + r"/phyaat_dataset"
+            + r"/Signals"
+            + r"/S{0:02d}".format(subject)
+            + r"/S{}_Textscore.csv".format(subject)
         )
 
         # Define columns to reject TimeStamp.
@@ -179,20 +179,20 @@ def parsing(here):
         episode_list.insert(0, header)
 
         # Make destination directory.
-        subject_dir = os.path.join(parsed_dir + "/S{0:02d}".format(subject))
+        subject_dir = os.path.join(parsed_dir + r"/S{0:02d}".format(subject))
         if not os.path.isdir(subject_dir):
             os.mkdir(subject_dir)
 
         # And, save
-        np.savez(subject_dir + "/S{0:02d}.npz".format(subject), *episode_list)
+        np.savez(subject_dir + r"/S{0:02d}.npz".format(subject), *episode_list)
 
 
 def store_MMSE(here):
     # Data download path.
-    data_path = os.path.join(here + "\\train" + "\\datasets" + "\\data")
+    data_path = os.path.join(here + r"/train" + r"/datasets" + r"/data")
 
     # First make directory to store data
-    MMSE_dir = os.path.join(data_path + "\\MMSE")
+    MMSE_dir = os.path.join(data_path + r"/MMSE")
     if os.path.isdir(MMSE_dir):
         return None
 
@@ -200,7 +200,7 @@ def store_MMSE(here):
     os.mkdir(MMSE_dir)
 
     # create data path list
-    episode_path = os.path.join(data_path + "\\episode_parsed")
+    episode_path = os.path.join(data_path + r"episode_parsed")
     file_list = sorted([i for i in os.listdir(episode_path) if i[0] == "S"])
 
     for i, dir in enumerate(file_list):
@@ -214,7 +214,7 @@ def store_MMSE(here):
         for i, item in tqdm(
             enumerate(list),
             total=len(list),
-            desc="Subject_{0:02d}".format(i+1),
+            desc="Subject_{0:02d}".format(i + 1),
             ncols=80,
             leave=False,
         ):

@@ -5,6 +5,7 @@ import numpy as np
 import natsort
 from util import *
 
+###################################################################
 # Data parse.
 here = os.path.dirname(os.path.abspath(__file__))
 if not (
@@ -16,6 +17,13 @@ if not (
 print("Base parsing done.")
 input("Press enter to continue...")
 
-# Data visualization.
+###################################################################
 # Save entropy of each episode.
 store_MMSE(here)
+
+print("Calculated sample entropy of each episode for all subjects.")
+input("Press enter to continue...")
+
+###################################################################
+# Data visualization.
+### Needs to make a function that plot ?? and pause and continue...
